@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AdvanceJs_410-01</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="top">
+        <div class="top_left">
+          <img src="img/githubLogo.png" alt="" />
+          <p>Github Finder</p>
+        </div>
+        <div class="top_right">
+          <p>Home</p>
+          <p>About</p>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="bottom_top">
+          <div class="para">
+            <p>Let's stalk someone on Github</p>
+            <p onclick="clearFun()">CLEAR</p>
+          </div>
+          <div class="search">
+            <input id="input" type="text" />
+            <button onclick="search()">Go</button>
+          </div>
+        </div>
+        <div id="bottom_bottom" class="bottom_bottom"></div>
+      </div>
+    </div>
+
+    <script>
+      async function fun() {
+        const response = await fetch(
+          `https://api.github.com/search/users?q=Geekster`
+        );
+        const data = await response.json();
+        console.log(data);
+
+        arr = [];
+        arr.push(data.items);
+        for (let i = 0; i < arr[0].length; i++) {
+          const bottom_bottom = document.getElementById("bottom_bottom");
+          bottom_bottom.innerHTML += `<div class="card">
+                    <div class="card_top">
+                        <div class="img">
+                            <img src="${arr[0][i].avatar_url}" alt="">
+                        </div>
+                        <div class="content">
+                            <h4>${arr[0][i].login}</h4>
+                            <p><a href=${arr[0][i].html_url}> View Profile </a></p>
+                        </div>
+                    </div>
+                    <div class="card_bottom">
+                        <div class="horizontalLine"></div>
+                    </div>
+                </div>`;
+        }
+      }
+      fun();
+
+      function clearFun() {
+        document.getElementById("bottom_bottom").innerHTML = "";
+      }
+
+      async function search() {
+        document.getElementById("bottom_bottom").innerHTML = "";
+        let arr = [];
+
+        const input = document.getElementById("input").value;
+        const response = await fetch(
+          `https://api.github.com/search/users?q=${input}`
+        );
+        const data = await response.json();
+
+        arr = [];
+        arr.push(data.items);
+        for (let i = 0; i < arr[0].length; i++) {
+          const bottom_bottom = document.getElementById("bottom_bottom");
+          bottom_bottom.innerHTML += `<div class="card">
+                    <div class="card_top">
+                        <div class="img">
+                            <img src="${arr[0][i].avatar_url}" alt="">
+                        </div>
+                        <div class="content">
+                            <h4>${arr[0][i].login}</h4>
+                            <p><a href=${arr[0][i].html_url}> View Profile </a></p>
+                        </div>
+                    </div>
+                    <div class="card_bottom">
+                        <div class="horizontalLine"></div>
+                    </div>
+                </div>`;
+        }
+
+        document.getElementById("input").value = "";
+      }
+    </script>
+  </body>
+</html>
